@@ -1,0 +1,62 @@
+{
+  "site": {
+    "brand": "HEARTH & HOPS",
+    "shopHref": "#",
+    "nav": ["Beers", "About", "Events", "News"]
+  },
+  "hero": {
+    "eyebrow": "FEATURED DRAFT",
+    "title": "Artisanally Crafted.\nAuthentically Brewed.",
+    "body": "Deep roots, slow pours, and a relentless pursuit of the perfect pint. We brew for the connoisseur who values the story behind the glass as much as the liquid within.",
+    "primaryCta": "Go to shop",
+    "secondaryCta": "See our beers",
+    "featuredLabel": "Placeholder",
+    "featuredTitle": "Midnight Forge",
+    "featuredBody": "A dark, editorial placeholder for the featured bottle or can artwork."
+  },
+  "beers": [
+    {
+      "name": "Midnight Forge",
+      "style": "Imperial Stout • 9.5% ABV",
+      "tag": "Limited Release",
+      "price": "$12",
+      "body": "A placeholder stout card for a deep, roasted flagship release."
+    },
+    {
+      "name": "Copper Horizon",
+      "style": "West Coast IPA • 7.2% ABV",
+      "tag": "Award Winning",
+      "price": "$10",
+      "body": "A placeholder IPA card for a bright, hop-forward beer."
+    },
+    {
+      "name": "Golden Anvil",
+      "style": "Czech Pilsner • 4.8% ABV",
+      "tag": "Fresh Batch",
+      "price": "$8",
+      "body": "A placeholder pilsner card for a clean, crisp everyday pour."
+    },
+    {
+      "name": "Ember Ale",
+      "style": "Amber Ale • 5.5% ABV",
+      "tag": "Seasonal",
+      "price": "$9",
+      "body": "A placeholder amber ale card for a malty, balanced release."
+    }
+  ],
+  "story": {
+    "eyebrow": "OUR PHILOSOPHY",
+    "title": "Respect the Process.",
+    "paragraphs": [
+      "At Hearth & Hops, we believe that great beer cannot be rushed. It requires patience, an understanding of the raw materials, and a deep respect for the centuries-old traditions of brewing.",
+      "We source only the finest local grains and noble hops, water drawn from ancient aquifers, and yeast strains carefully cultivated to produce complex, nuanced flavors. Every batch is a testament to our dedication to the craft."
+    ],
+    "cta": "Read our full story"
+  },
+  "footer": {
+    "tagline": "Crafting authentic, small-batch beers for the modern connoisseur.",
+    "addressLines": ["123 Brewer's Lane", "Craftville, OR 97000", "Wed-Sun: 12pm - 10pm"],
+    "legalLinks": ["Privacy Policy", "Terms of Service", "Age Verification", "Wholesale"],
+    "copyright": "© 2024 HEARTH & HOPS BREWING CO. ENJOY RESPONSIBLY."
+  }
+}
