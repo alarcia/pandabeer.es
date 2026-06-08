@@ -1,0 +1,28 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker-compose.yml
+      - .github/workflows/deploy-infra.yml
+
+  # Allow manual trigger to force infra restart
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, raspberry]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start infrastructure
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          docker compose up -d --wait

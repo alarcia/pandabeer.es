@@ -10,7 +10,10 @@
     "backend:dev": "pnpm --dir apps/backend dev",
     "backend:build": "pnpm --dir apps/backend build",
     "backend:start": "pnpm --dir apps/backend start",
-    "backend:migrate": "pnpm --dir apps/backend db:migrate"
+    "backend:migrate": "pnpm --dir apps/backend db:migrate",
+    "infra:up": "docker compose up -d --wait",
+    "infra:down": "docker compose down",
+    "infra:logs": "docker compose logs -f"
   },
   "dependencies": {},
   "devDependencies": {}
