@@ -1,5 +1,5 @@
 <div align="center">
-  <h1><img src="public/images/logo400.png" alt="Logo" height="40" valign="middle"> pandabeer.es </h1>
+  <h1><img src="apps/web/public/images/logo400.png" alt="Logo" height="40" valign="middle"> pandabeer.es </h1>
 
   <p>
     <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white" alt="Next.js" /></a>
@@ -8,7 +8,7 @@
     <a href="https://pnpm.io/"><img src="https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=white" alt="pnpm" /></a>
   </p>
 
-  <p align="center"><strong>Content-first, high-performance frontend for a craft brewery</strong></p>
+  <p align="center"><strong>Content-first frontend + separate Medusa backend for a craft brewery</strong></p>
 </div>
 
   <div style="margin: 1rem auto 0; max-width: 52rem; padding: 0.9rem 1rem; border: 1px solid #f5c542; border-radius: 0.75rem; background: #fff7e6; color: #7a4d00; text-align: left;">
@@ -25,9 +25,18 @@
 
 ## Project layout
 
-- `app/` — Next.js app routes and pages
-- `public/` — static assets (images, fonts)
-- `content/` — simple JSON content used by the site
+- `apps/web/` — Next.js storefront
+- `apps/backend/` — Medusa backend scaffold, isolated from the storefront
+
+## Backend
+
+The storefront lives in `apps/web/` and the Medusa backend is scaffolded separately under `apps/backend/`, so each deployable unit has a clean boundary. The backend uses its own package, config, and environment file, and is meant to run independently from the Next.js app.
+
+Key scripts:
+
+- `pnpm backend:dev` — run the Medusa backend in development
+- `pnpm backend:build` — create the Medusa production build
+- `pnpm backend:start` — start the built Medusa app
 
 ---
 

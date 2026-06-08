@@ -3,24 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "pnpm --dir apps/web dev",
+    "build": "pnpm --dir apps/web build",
+    "start": "pnpm --dir apps/web start",
+    "lint": "pnpm --dir apps/web lint",
+    "backend:dev": "pnpm --dir apps/backend dev",
+    "backend:build": "pnpm --dir apps/backend build",
+    "backend:start": "pnpm --dir apps/backend start",
+    "backend:migrate": "pnpm --dir apps/backend db:migrate"
   },
-  "dependencies": {
-    "next": "16.2.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

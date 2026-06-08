@@ -1,0 +1,22 @@
+{
+  "name": "@pandabeer/medusa-backend",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "medusa develop",
+    "build": "medusa build",
+    "start": "medusa start",
+    "db:migrate": "medusa db:migrate",
+    "predeploy": "medusa db:migrate"
+  },
+  "dependencies": {
+    "@medusajs/admin-sdk": "^2.15.5",
+    "@medusajs/framework": "^2.14.0",
+    "@medusajs/medusa": "^2.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "ts-node": "^10",
+    "typescript": "^5"
+  }
+}

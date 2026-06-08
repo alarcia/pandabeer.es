@@ -16,20 +16,14 @@ export default function Home() {
             <ul className="hidden items-center gap-8 md:flex">
               {homeContent.site.nav.map((item) => (
                 <li key={item}>
-                  <a
-                    className="font-sans text-[12px] font-medium uppercase tracking-[0.08em] text-text/75 transition-colors hover:text-primary"
-                    href="#"
-                  >
+                  <a className="font-sans text-[12px] font-medium uppercase tracking-[0.08em] text-text/75 transition-colors hover:text-primary" href="#">
                     {item}
                   </a>
                 </li>
               ))}
             </ul>
 
-            <a
-              className="rounded-full bg-primary px-5 py-2 text-[12px] font-bold uppercase tracking-[0.08em] text-accent transition-opacity hover:opacity-90"
-              href={homeContent.site.shopHref}
-            >
+            <a className="rounded-full bg-primary px-5 py-2 text-[12px] font-bold uppercase tracking-[0.08em] text-accent transition-opacity hover:opacity-90" href={homeContent.site.shopHref}>
               Shop
             </a>
           </div>
@@ -39,9 +33,7 @@ export default function Home() {
           <div className="mx-auto grid min-h-[60vh] max-w-[1280px] items-stretch lg:grid-cols-[minmax(0,7fr)_minmax(320px,3fr)]">
             <div className={`relative flex items-center overflow-hidden px-4 py-16 sm:px-6 md:py-24 ${heroGradient}`}>
               <div className="relative z-10 max-w-2xl">
-                <p className="mb-4 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">
-                  {homeContent.hero.eyebrow}
-                </p>
+                <p className="mb-4 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
                 <h1 className="font-serif text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] text-inherit">
                   {homeContent.hero.title.split("\n").map((line) => (
                     <span key={line} className="block">
@@ -49,20 +41,12 @@ export default function Home() {
                     </span>
                   ))}
                 </h1>
-                <p className="mt-6 max-w-xl text-[18px] leading-8 text-background/80">
-                  {homeContent.hero.body}
-                </p>
+                <p className="mt-6 max-w-xl text-[18px] leading-8 text-background/80">{homeContent.hero.body}</p>
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                  <a
-                    className="inline-flex items-center justify-center rounded-full border border-background/30 px-8 py-4 text-[12px] font-bold uppercase tracking-[0.08em] text-background transition-colors hover:bg-background/10"
-                    href="#beers"
-                  >
+                  <a className="inline-flex items-center justify-center rounded-full border border-background/30 px-8 py-4 text-[12px] font-bold uppercase tracking-[0.08em] text-background transition-colors hover:bg-background/10" href="#beers">
                     {homeContent.hero.secondaryCta}
                   </a>
-                  <a
-                    className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 text-[12px] font-bold uppercase tracking-[0.08em] text-accent transition-opacity hover:opacity-90"
-                    href={homeContent.site.shopHref}
-                  >
+                  <a className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 text-[12px] font-bold uppercase tracking-[0.08em] text-accent transition-opacity hover:opacity-90" href={homeContent.site.shopHref}>
                     {homeContent.hero.primaryCta}
                   </a>
                 </div>
@@ -71,23 +55,13 @@ export default function Home() {
 
             <aside className="flex items-center justify-center bg-surface px-6 py-12 text-accent">
               <div className="w-full max-w-sm text-center">
-                <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">
-                  {homeContent.hero.eyebrow}
-                </p>
-                <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">
-                  {homeContent.hero.featuredTitle}
-                </h2>
+                <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
+                <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">{homeContent.hero.featuredTitle}</h2>
                 <div className={`mt-8 flex h-64 items-center justify-center rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
                   <div className="space-y-3 px-6">
-                    <div className="text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">
-                      {homeContent.hero.featuredLabel}
-                    </div>
-                    <div className="text-xl font-semibold text-accent">
-                      {homeContent.hero.featuredTitle}
-                    </div>
-                    <p className="text-sm leading-6 text-accent/75">
-                      {homeContent.hero.featuredBody}
-                    </p>
+                    <div className="text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">{homeContent.hero.featuredLabel}</div>
+                    <div className="text-xl font-semibold text-accent">{homeContent.hero.featuredTitle}</div>
+                    <p className="text-sm leading-6 text-accent/75">{homeContent.hero.featuredBody}</p>
                   </div>
                 </div>
               </div>
@@ -99,12 +73,8 @@ export default function Home() {
           <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-6">
             <div className="mb-12 flex items-end justify-between gap-6">
               <div>
-                <h2 className="font-serif text-[clamp(2rem,3vw,2.5rem)] font-bold leading-tight text-text">
-                  Currently Pouring
-                </h2>
-                <p className="mt-2 text-[16px] leading-7 text-text/70">
-                  Small batches, big character.
-                </p>
+                <h2 className="font-serif text-[clamp(2rem,3vw,2.5rem)] font-bold leading-tight text-text">Currently Pouring</h2>
+                <p className="mt-2 text-[16px] leading-7 text-text/70">Small batches, big character.</p>
               </div>
               <a className="hidden text-[12px] font-bold uppercase tracking-[0.08em] text-primary md:inline-flex" href="#">
                 View All
@@ -113,32 +83,20 @@ export default function Home() {
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {homeContent.beers.map((beer) => (
-                <article
-                  key={beer.name}
-                  className="flex h-full flex-col border border-text/10 bg-surface p-6 shadow-[0_1px_3px_rgba(47,42,36,0.06)] transition-transform duration-300 hover:-translate-y-0.5"
-                >
+                <article key={beer.name} className="flex h-full flex-col border border-text/10 bg-surface p-6 shadow-[0_1px_3px_rgba(47,42,36,0.06)] transition-transform duration-300 hover:-translate-y-0.5">
                   <div className={`mb-6 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient}`}>
                     <div className="px-5 text-center">
-                      <div className="mb-3 text-[12px] font-bold uppercase tracking-[0.24em] text-secondary display-accent">
-                        {beer.tag}
-                      </div>
-                      <div className="text-[1.25rem] font-semibold text-accent">
-                        {beer.name}
-                      </div>
+                      <div className="mb-3 text-[12px] font-bold uppercase tracking-[0.24em] text-secondary display-accent">{beer.tag}</div>
+                      <div className="text-[1.25rem] font-semibold text-accent">{beer.name}</div>
                       <p className="mt-2 text-sm leading-6 text-accent/75">Placeholder visual</p>
                     </div>
                   </div>
                   <div className="flex flex-1 flex-col">
-                    <h3 className="font-serif text-[1.375rem] font-semibold leading-tight text-text">
-                      {beer.name}
-                    </h3>
+                    <h3 className="font-serif text-[1.375rem] font-semibold leading-tight text-text">{beer.name}</h3>
                     <p className="mt-1 text-[16px] leading-7 text-text/70">{beer.style}</p>
                     <p className="mt-4 flex-1 text-[16px] leading-7 text-text/70">{beer.body}</p>
                   </div>
-                  <a
-                    className="mt-6 inline-flex items-center justify-center border border-text/20 px-4 py-3 text-[12px] font-bold uppercase tracking-[0.08em] text-text transition-colors hover:bg-text hover:text-background"
-                    href={homeContent.site.shopHref}
-                  >
+                  <a className="mt-6 inline-flex items-center justify-center border border-text/20 px-4 py-3 text-[12px] font-bold uppercase tracking-[0.08em] text-text transition-colors hover:bg-text hover:text-background" href={homeContent.site.shopHref}>
                     Add to cart - {beer.price}
                   </a>
                 </article>
@@ -158,9 +116,7 @@ export default function Home() {
                 <div className="flex h-full items-center justify-center px-10 text-center">
                   <div>
                     <div className="text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">Placeholder</div>
-                    <div className="mt-3 font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight text-text">
-                      Brewing kettles / editorial photo
-                    </div>
+                    <div className="mt-3 font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight text-text">Brewing kettles / editorial photo</div>
                   </div>
                 </div>
               </div>
@@ -168,12 +124,8 @@ export default function Home() {
             </div>
 
             <div className="lg:col-span-5 lg:pl-8">
-              <span className="mb-4 block text-[12px] font-bold uppercase tracking-[0.24em] text-primary">
-                {homeContent.story.eyebrow}
-              </span>
-              <h2 className="font-serif text-[clamp(2rem,3vw,2.5rem)] font-bold leading-tight text-text">
-                {homeContent.story.title}
-              </h2>
+              <span className="mb-4 block text-[12px] font-bold uppercase tracking-[0.24em] text-primary">{homeContent.story.eyebrow}</span>
+              <h2 className="font-serif text-[clamp(2rem,3vw,2.5rem)] font-bold leading-tight text-text">{homeContent.story.title}</h2>
               <div className="mt-6 space-y-6 text-[16px] leading-8 text-text/70">
                 {homeContent.story.paragraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
@@ -190,9 +142,7 @@ export default function Home() {
       <footer className="bg-accent pb-8 pt-16 text-background md:pt-24">
         <div className="mx-auto mb-12 grid max-w-[1280px] gap-10 px-4 sm:px-6 md:grid-cols-4 lg:px-6">
           <div>
-              <div className="font-serif text-2xl font-bold tracking-tighter text-background display-accent">
-                  {homeContent.site.brand}
-                </div>
+            <div className="font-serif text-2xl font-bold tracking-tighter text-background display-accent">{homeContent.site.brand}</div>
             <p className="mt-4 max-w-xs text-[16px] leading-7 text-background/75">{homeContent.footer.tagline}</p>
           </div>
 
