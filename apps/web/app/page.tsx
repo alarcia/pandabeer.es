@@ -1,9 +1,13 @@
 import homeContent from "@/content/home.json";
+import { getHeroFeatured } from "@/lib/content";
 
 const heroGradient = "bg-[radial-gradient(circle_at_top_right,_rgba(243,182,53,0.22),_transparent_42%),linear-gradient(135deg,_#2f2a24_0%,_#403830_45%,_#2f2a24_100%)]";
 const cardGradient = "bg-[linear-gradient(145deg,_rgba(243,182,53,0.2),_rgba(236,233,219,0.95))]";
 
-export default function Home() {
+export default async function Home() {
+  // Cerveza destacada del hero desde Medusa; null → fallback a home.json.
+  const hero = await getHeroFeatured();
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-text">
       <main className="flex-1 pt-20">
@@ -56,14 +60,22 @@ export default function Home() {
             <aside className="flex items-center justify-center bg-surface px-6 py-12 text-accent">
               <div className="w-full max-w-sm text-center">
                 <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
-                <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">{homeContent.hero.featuredTitle}</h2>
-                <div className={`mt-8 flex h-64 items-center justify-center rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
-                  <div className="space-y-3 px-6">
-                    <div className="text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">{homeContent.hero.featuredLabel}</div>
-                    <div className="text-xl font-semibold text-accent">{homeContent.hero.featuredTitle}</div>
-                    <p className="text-sm leading-6 text-accent/75">{homeContent.hero.featuredBody}</p>
-                  </div>
+                <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">{hero?.title ?? homeContent.hero.featuredTitle}</h2>
+                <div className={`mt-8 flex h-64 items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
+                  {hero?.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={hero.imageUrl} alt={hero.title} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="space-y-3 px-6">
+                      <div className="text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">{hero ? (hero.price ?? homeContent.hero.featuredLabel) : homeContent.hero.featuredLabel}</div>
+                      <div className="text-xl font-semibold text-accent">{hero?.title ?? homeContent.hero.featuredTitle}</div>
+                      <p className="text-sm leading-6 text-accent/75">{hero?.body ?? homeContent.hero.featuredBody}</p>
+                    </div>
+                  )}
                 </div>
+                {hero?.imageUrl && hero.price ? (
+                  <p className="mt-4 text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">{hero.price}</p>
+                ) : null}
               </div>
             </aside>
           </div>

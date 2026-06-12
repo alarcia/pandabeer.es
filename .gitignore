@@ -40,6 +40,8 @@ apps/backend/.medusa/
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!apps/*/.env.example
 
 # vercel
 .vercel
