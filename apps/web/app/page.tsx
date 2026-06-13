@@ -1,12 +1,21 @@
 import homeContent from "@/content/home.json";
-import { getHeroFeatured } from "@/lib/content";
+import { getHeroFeatured, getCurrentlyPouring, type Beer } from "@/lib/content";
 
 const heroGradient = "bg-[radial-gradient(circle_at_top_right,_rgba(243,182,53,0.22),_transparent_42%),linear-gradient(135deg,_#2f2a24_0%,_#403830_45%,_#2f2a24_100%)]";
 const cardGradient = "bg-[linear-gradient(145deg,_rgba(243,182,53,0.2),_rgba(236,233,219,0.95))]";
 
+// Normaliza una cerveza del placeholder (home.json) a la forma `Beer` de Medusa,
+// para que el grid renderice una sola estructura venga de donde venga.
+function placeholderBeer(b: (typeof homeContent.beers)[number]): Beer {
+  return { title: b.name, style: b.style, tag: b.tag, body: b.body, imageUrl: null, price: b.price };
+}
+
 export default async function Home() {
-  // Cerveza destacada del hero desde Medusa; null → fallback a home.json.
+  // Contenido desde Medusa; si no hay conexión/elementos, fallback a home.json.
   const hero = await getHeroFeatured();
+  const pouringFromMedusa = await getCurrentlyPouring();
+  const pouring: Beer[] =
+    pouringFromMedusa.length > 0 ? pouringFromMedusa : homeContent.beers.map(placeholderBeer);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-text">
@@ -61,10 +70,11 @@ export default async function Home() {
               <div className="w-full max-w-sm text-center">
                 <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
                 <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">{hero?.title ?? homeContent.hero.featuredTitle}</h2>
-                <div className={`mt-8 flex h-64 items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
+                <div className={`mt-8 flex ${hero?.imageUrl ? "aspect-[3/4]" : "h-64"} items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
                   {hero?.imageUrl ? (
+                    // Botella vertical entera sobre el degradado de marca (sin recortar).
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={hero.imageUrl} alt={hero.title} className="h-full w-full object-cover" />
+                    <img src={hero.imageUrl} alt={hero.title} className="h-full w-full object-contain p-6" />
                   ) : (
                     <div className="space-y-3 px-6">
                       <div className="text-[12px] font-bold uppercase tracking-[0.24em] text-secondary">{hero ? (hero.price ?? homeContent.hero.featuredLabel) : homeContent.hero.featuredLabel}</div>
@@ -94,22 +104,29 @@ export default async function Home() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {homeContent.beers.map((beer) => (
-                <article key={beer.name} className="flex h-full flex-col border border-text/10 bg-surface p-6 shadow-[0_1px_3px_rgba(47,42,36,0.06)] transition-transform duration-300 hover:-translate-y-0.5">
-                  <div className={`mb-6 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient}`}>
-                    <div className="px-5 text-center">
-                      <div className="mb-3 text-[12px] font-bold uppercase tracking-[0.24em] text-secondary display-accent">{beer.tag}</div>
-                      <div className="text-[1.25rem] font-semibold text-accent">{beer.name}</div>
-                      <p className="mt-2 text-sm leading-6 text-accent/75">Placeholder visual</p>
-                    </div>
+              {pouring.map((beer, i) => (
+                <article key={`${beer.title}-${i}`} className="flex h-full flex-col border border-text/10 bg-surface p-6 shadow-[0_1px_3px_rgba(47,42,36,0.06)] transition-transform duration-300 hover:-translate-y-0.5">
+                  <div className={`mb-6 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient}`}>
+                    {beer.imageUrl ? (
+                      // Botella vertical entera sobre el degradado de marca (sin recortar).
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={beer.imageUrl} alt={beer.title} className="h-full w-full object-contain p-4" />
+                    ) : (
+                      <div className="px-5 text-center">
+                        {beer.tag ? <div className="mb-3 text-[12px] font-bold uppercase tracking-[0.24em] text-secondary display-accent">{beer.tag}</div> : null}
+                        <div className="text-[1.25rem] font-semibold text-accent">{beer.title}</div>
+                        <p className="mt-2 text-sm leading-6 text-accent/75">Placeholder visual</p>
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col">
-                    <h3 className="font-serif text-[1.375rem] font-semibold leading-tight text-text">{beer.name}</h3>
-                    <p className="mt-1 text-[16px] leading-7 text-text/70">{beer.style}</p>
-                    <p className="mt-4 flex-1 text-[16px] leading-7 text-text/70">{beer.body}</p>
+                    {beer.tag ? <span className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-secondary display-accent">{beer.tag}</span> : null}
+                    <h3 className="font-serif text-[1.375rem] font-semibold leading-tight text-text">{beer.title}</h3>
+                    {beer.style ? <p className="mt-1 text-[16px] leading-7 text-text/70">{beer.style}</p> : null}
+                    {beer.body ? <p className="mt-4 flex-1 text-[16px] leading-7 text-text/70">{beer.body}</p> : null}
                   </div>
                   <a className="mt-6 inline-flex items-center justify-center border border-text/20 px-4 py-3 text-[12px] font-bold uppercase tracking-[0.08em] text-text transition-colors hover:bg-text hover:text-background" href={homeContent.site.shopHref}>
-                    Add to cart - {beer.price}
+                    {beer.price ? `Add to cart - ${beer.price}` : "Ver en la tienda"}
                   </a>
                 </article>
               ))}

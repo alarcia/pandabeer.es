@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --dir apps/web dev",
+    "web": "pnpm --dir apps/web dev",
     "build": "pnpm --dir apps/web build",
     "start": "pnpm --dir apps/web start",
     "lint": "pnpm --dir apps/web lint",
+    "medusa": "pnpm --dir apps/backend dev",
+    "backend": "pnpm --dir apps/backend dev",
     "backend:dev": "pnpm --dir apps/backend dev",
     "backend:build": "pnpm --dir apps/backend build",
     "backend:start": "pnpm --dir apps/backend start",
