@@ -1,15 +1,15 @@
 import Medusa from "@medusajs/js-sdk"
 
 /**
- * Instancia única del SDK de Medusa para el storefront.
+ * Single Medusa SDK instance for the storefront.
  *
- * Se usa desde React Server Components (fetch en el servidor, bueno para SEO).
- * El SDK añade automáticamente la publishable API key en las peticiones a la
- * Store API; NUNCA usar fetch() a pelo (faltarían cabeceras y daría error).
+ * Used from React Server Components (server-side fetch, good for SEO).
+ * The SDK automatically adds the publishable API key on requests to the
+ * Store API; NEVER use raw fetch() (headers would be missing and it would error).
  *
- * Variables de entorno (ver .env.example):
- *  - NEXT_PUBLIC_MEDUSA_BACKEND_URL   → URL del backend Medusa
- *  - NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY → clave pk_... del sales channel
+ * Environment variables (see .env.example):
+ *  - NEXT_PUBLIC_MEDUSA_BACKEND_URL   → Medusa backend URL
+ *  - NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY → pk_... key of the sales channel
  */
 export const sdk = new Medusa({
   baseUrl:

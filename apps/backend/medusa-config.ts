@@ -5,8 +5,8 @@ loadEnv(process.env.NODE_ENV || "development", process.cwd());
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
-    // DATABASE_SSL_DISABLED=true en .env local (Pi sin SSL).
-    // En producción (Neon) no se define y SSL queda activo por defecto.
+    // DATABASE_SSL_DISABLED=true in the local .env (Pi without SSL).
+    // In production (Neon) it's left undefined and SSL stays on by default.
     ...(process.env.DATABASE_SSL_DISABLED === "true" && {
       databaseDriverOptions: { connection: { ssl: false } },
     }),

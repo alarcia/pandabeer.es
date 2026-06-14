@@ -1,23 +1,23 @@
 import { sdk } from "@/lib/medusa"
 
-/** Máximo de cervezas en el grid "Currently Pouring".
- *  6 encaja con el grid de 4 columnas (4+2) sin filas huérfanas; las más
- *  recientes/destacadas van aquí, el resto del catálogo se ve en la tienda. */
+/** Maximum number of beers in the "Currently Pouring" grid.
+ *  6 fits the 4-column grid (4+2) with no orphan rows; the most
+ *  recent/featured ones go here, the rest of the catalogue lives in the shop. */
 const POURING_MAX = 6
 
-/** Campos de producto que pedimos a la Store API (hero y grid comparten shape). */
+/** Product fields we request from the Store API (hero and grid share the shape). */
 const PRODUCT_FIELDS =
   "id,title,subtitle,description,created_at,metadata,*images,*variants.calculated_price"
 
 /**
- * Forma de vista mínima de una cerveza. Lo que los componentes necesitan
- * pintar, desacoplado del shape completo del producto de Medusa.
+ * Minimal view shape of a beer. What the components need to
+ * render, decoupled from the full Medusa product shape.
  */
 export type Beer = {
   title: string
-  /** Estilo + ABV (campo nativo `subtitle`), ej. "IPA · 6,5%". */
+  /** Style + ABV (native `subtitle` field), e.g. "IPA · 6.5%". */
   style: string | null
-  /** Badge de marketing (`metadata.tag`), ej. "Edición limitada". */
+  /** Marketing badge (`metadata.tag`), e.g. "Limited edition". */
   tag: string | null
   body: string | null
   imageUrl: string | null
@@ -25,13 +25,13 @@ export type Beer = {
 }
 
 /**
- * Cerveza destacada del hero, o null si no hay backend, no hay key, o ningún
- * producto está marcado.
+ * Hero featured beer, or null if there's no backend, no key, or no
+ * product is marked.
  *
- * Curación: se marca en el admin con `metadata.hero_featured = true`. La Store
- * API no filtra de forma fiable por metadata arbitraria, así que pedimos un
- * lote pequeño y elegimos en JS. Si el catálogo crece mucho, migrar a una
- * colección o a un módulo `site_content` (ver plan).
+ * Curation: marked in the admin with `metadata.hero_featured = true`. The Store
+ * API can't reliably filter by arbitrary metadata, so we fetch a small
+ * batch and pick in JS. If the catalogue grows large, migrate to a
+ * collection or a `site_content` module (see plan).
  */
 export async function getHeroFeatured(): Promise<Beer | null> {
   const products = await listProducts()
@@ -44,17 +44,17 @@ export async function getHeroFeatured(): Promise<Beer | null> {
 }
 
 /**
- * Cervezas del grid "Currently Pouring": las marcadas en el admin con
- * `metadata.pouring = true`, con un tope de POURING_MAX.
+ * Beers for the "Currently Pouring" grid: those marked in the admin with
+ * `metadata.pouring = true`, capped at POURING_MAX.
  *
- * Orden (ver comparePouring):
- *   1) primero las que tienen `metadata.pouring_order` (número ascendente),
- *   2) después el resto por fecha de creación descendente (lo nuevo arriba).
- * Así, crear una cerveza nueva la coloca arriba sin renumerar nada; el
- * `pouring_order` queda como override opcional para "fijar" cervezas concretas.
+ * Order (see comparePouring):
+ *   1) first those with `metadata.pouring_order` (ascending number),
+ *   2) then the rest by creation date descending (newest on top).
+ * This way, creating a new beer places it on top without renumbering anything;
+ * `pouring_order` stays as an optional override to "pin" specific beers.
  *
- * Devuelve [] si no hay backend / key / ninguna marcada — el componente cae
- * entonces al placeholder de home.json.
+ * Returns [] if there's no backend / key / none marked — the component then
+ * falls back to the home.json placeholder.
  */
 export async function getCurrentlyPouring(): Promise<Beer[]> {
   const products = await listProducts()
@@ -69,7 +69,7 @@ export async function getCurrentlyPouring(): Promise<Beer[]> {
     .map(toBeer)
 }
 
-/** Tipo mínimo de producto que consumimos (lo que pedimos en PRODUCT_FIELDS). */
+/** Minimal product type we consume (what we request in PRODUCT_FIELDS). */
 type StoreProductLike = {
   title: string
   subtitle?: string | null
@@ -84,18 +84,18 @@ type StoreProductLike = {
 }
 
 /**
- * Pide un lote de productos a la Store API con el contexto de región necesario
- * para los precios. Devuelve null ante cualquier fallo o si falta la key, para
- * que los llamadores degraden al placeholder (la web nunca se rompe en blanco).
+ * Fetches a batch of products from the Store API with the region context needed
+ * for prices. Returns null on any failure or if the key is missing, so that
+ * callers degrade to the placeholder (the site never renders blank).
  */
 async function listProducts(): Promise<StoreProductLike[] | null> {
-  // Sin key configurada no tiene sentido llamar.
+  // With no key configured there's no point in calling.
   if (!process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY) {
     return null
   }
 
   try {
-    // Medusa v2 exige un region_id como contexto para calcular precios.
+    // Medusa v2 requires a region_id as the context to calculate prices.
     const regionId = await getDefaultRegionId()
 
     const { products } = await sdk.store.product.list({
@@ -106,12 +106,12 @@ async function listProducts(): Promise<StoreProductLike[] | null> {
 
     return products as StoreProductLike[]
   } catch {
-    // Backend caído, CORS, key inválida... degradamos a placeholder.
+    // Backend down, CORS, invalid key... degrade to placeholder.
     return null
   }
 }
 
-/** Primera región disponible, usada como contexto de precio. null si no hay. */
+/** First available region, used as the price context. null if there's none. */
 async function getDefaultRegionId(): Promise<string | null> {
   try {
     const { regions } = await sdk.store.region.list({ limit: 1 })
@@ -121,7 +121,7 @@ async function getDefaultRegionId(): Promise<string | null> {
   }
 }
 
-/** Mapea un producto de Medusa a la forma de vista mínima. */
+/** Maps a Medusa product to the minimal view shape. */
 function toBeer(product: StoreProductLike): Beer {
   const tag = product.metadata?.tag
   return {
@@ -129,17 +129,17 @@ function toBeer(product: StoreProductLike): Beer {
     style: product.subtitle ?? null,
     tag: typeof tag === "string" && tag.trim() !== "" ? tag : null,
     body: product.description ?? null,
-    // Imagen original (no el thumbnail): Medusa recorta el thumbnail y puede
-    // perder la transparencia/ratio. La original es el PNG vertical recortado
-    // de la botella, que se muestra entero sobre el degradado de marca.
+    // Original image (not the thumbnail): Medusa crops the thumbnail and may
+    // lose transparency/ratio. The original is the cropped vertical PNG
+    // of the bottle, shown whole over the brand gradient.
     imageUrl: product.images?.[0]?.url ?? product.thumbnail ?? null,
     price: formatPrice(product),
   }
 }
 
 /**
- * Formatea el precio de la primera variante en EUR. `calculated_amount` viene
- * en la unidad mayor (4.5 = 4,50 €): se usa TAL CUAL, NUNCA dividir entre 100.
+ * Formats the first variant's price in EUR. `calculated_amount` comes
+ * in major units (4.5 = 4,50 €): use it AS IS, NEVER divide by 100.
  */
 function formatPrice(product: StoreProductLike): string | null {
   const price = product.variants?.[0]?.calculated_price
@@ -155,36 +155,36 @@ function formatPrice(product: StoreProductLike): string | null {
   }).format(amount)
 }
 
-/** Un flag de metadata es verdadero tanto si es booleano true como string "true". */
+/** A metadata flag is truthy whether it's the boolean true or the string "true". */
 function hasFlag(value: unknown): boolean {
   return value === true || value === "true"
 }
 
 /**
- * Comparador del grid: las cervezas con `pouring_order` van primero (número
- * ascendente); las que no lo tienen, después, por `created_at` descendente.
+ * Grid comparator: beers with `pouring_order` go first (ascending
+ * number); those without it come after, by `created_at` descending.
  */
 function comparePouring(a: StoreProductLike, b: StoreProductLike): number {
   const orderA = pouringOrder(a.metadata)
   const orderB = pouringOrder(b.metadata)
 
-  // Ambas con orden explícito (o ambas sin él): desempata por el propio orden.
+  // Both with explicit order (or both without): break the tie by the order itself.
   if (orderA !== orderB) {
     return orderA - orderB
   }
 
-  // Sin orden explícito en ambas: más reciente primero.
+  // No explicit order on either: newest first.
   return createdAtMs(b) - createdAtMs(a)
 }
 
-/** Lee `pouring_order` como número; las cervezas sin orden van al final (Infinity). */
+/** Reads `pouring_order` as a number; beers without an order go last (Infinity). */
 function pouringOrder(metadata: Record<string, unknown> | null | undefined): number {
   const raw = metadata?.pouring_order
   const n = typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN
   return Number.isFinite(n) ? n : Number.POSITIVE_INFINITY
 }
 
-/** `created_at` en milisegundos; 0 si falta o no es parseable. */
+/** `created_at` in milliseconds; 0 if missing or not parseable. */
 function createdAtMs(product: StoreProductLike): number {
   const t = product.created_at ? Date.parse(product.created_at) : NaN
   return Number.isFinite(t) ? t : 0

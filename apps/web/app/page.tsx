@@ -4,14 +4,14 @@ import { getHeroFeatured, getCurrentlyPouring, type Beer } from "@/lib/content";
 const heroGradient = "bg-[radial-gradient(circle_at_top_right,_rgba(243,182,53,0.22),_transparent_42%),linear-gradient(135deg,_#2f2a24_0%,_#403830_45%,_#2f2a24_100%)]";
 const cardGradient = "bg-[linear-gradient(145deg,_rgba(243,182,53,0.2),_rgba(236,233,219,0.95))]";
 
-// Normaliza una cerveza del placeholder (home.json) a la forma `Beer` de Medusa,
-// para que el grid renderice una sola estructura venga de donde venga.
+// Normalizes a placeholder beer (home.json) to the Medusa `Beer` shape,
+// so the grid renders a single structure no matter where it comes from.
 function placeholderBeer(b: (typeof homeContent.beers)[number]): Beer {
   return { title: b.name, style: b.style, tag: b.tag, body: b.body, imageUrl: null, price: b.price };
 }
 
 export default async function Home() {
-  // Contenido desde Medusa; si no hay conexión/elementos, fallback a home.json.
+  // Content from Medusa; if there's no connection/items, fall back to home.json.
   const hero = await getHeroFeatured();
   const pouringFromMedusa = await getCurrentlyPouring();
   const pouring: Beer[] =
@@ -72,7 +72,7 @@ export default async function Home() {
                 <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">{hero?.title ?? homeContent.hero.featuredTitle}</h2>
                 <div className={`mt-8 flex ${hero?.imageUrl ? "aspect-[3/4]" : "h-64"} items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
                   {hero?.imageUrl ? (
-                    // Botella vertical entera sobre el degradado de marca (sin recortar).
+                    // Whole vertical bottle over the brand gradient (uncropped).
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={hero.imageUrl} alt={hero.title} className="h-full w-full object-contain p-6" />
                   ) : (
@@ -108,7 +108,7 @@ export default async function Home() {
                 <article key={`${beer.title}-${i}`} className="flex h-full flex-col border border-text/10 bg-surface p-6 shadow-[0_1px_3px_rgba(47,42,36,0.06)] transition-transform duration-300 hover:-translate-y-0.5">
                   <div className={`mb-6 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient}`}>
                     {beer.imageUrl ? (
-                      // Botella vertical entera sobre el degradado de marca (sin recortar).
+                      // Whole vertical bottle over the brand gradient (uncropped).
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={beer.imageUrl} alt={beer.title} className="h-full w-full object-contain p-4" />
                     ) : (
@@ -126,7 +126,7 @@ export default async function Home() {
                     {beer.body ? <p className="mt-4 flex-1 text-[16px] leading-7 text-text/70">{beer.body}</p> : null}
                   </div>
                   <a className="mt-6 inline-flex items-center justify-center border border-text/20 px-4 py-3 text-[12px] font-bold uppercase tracking-[0.08em] text-text transition-colors hover:bg-text hover:text-background" href={homeContent.site.shopHref}>
-                    {beer.price ? `Add to cart - ${beer.price}` : "Ver en la tienda"}
+                    {beer.price ? `Add to cart - ${beer.price}` : "View in shop"}
                   </a>
                 </article>
               ))}
