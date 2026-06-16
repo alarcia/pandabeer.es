@@ -19,5 +19,19 @@
     "infra:logs": "docker compose logs -f"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "pnpm": {
+    "//": "Allow these packages to run install scripts. pnpm 10 blocks them by default and",
+    "//2": "fails CI installs (ERR_PNPM_IGNORED_BUILDS). sharp powers Next image optimization;",
+    "//3": "the rest are native deps used by Medusa. `pnpm approve-builds` is interactive, so we",
+    "//4": "declare them here for reproducible, non-interactive Docker builds.",
+    "onlyBuiltDependencies": [
+      "@medusajs/telemetry",
+      "esbuild",
+      "msgpackr-extract",
+      "protobufjs",
+      "sharp",
+      "unrs-resolver"
+    ]
+  }
 }
