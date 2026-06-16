@@ -9,13 +9,15 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "apps/**"
-      - "apps/web/Dockerfile"
-      - "apps/backend/Dockerfile"
-      - "docker-compose.app.yml"
-      - ".dockerignore"
-      - ".github/workflows/deploy-apps.yml"
+    # Deploy on every push to main EXCEPT when it only touches files that don't
+    # affect the running apps. A push is skipped only if ALL its files match here;
+    # mixing a doc change with a code change still deploys.
+    paths-ignore:
+      - "**/*.md"
+      - "LICENSE"
+      # Infra has its own pipeline (deploy-infra.yml); changing it must not rebuild the apps.
+      - "docker-compose.yml"
+      - ".github/workflows/deploy-infra.yml"
 
   # Allow manual redeploy.
   workflow_dispatch:
