@@ -35,6 +35,7 @@ apps/backend/static/
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
+!.env.deploy.example
 !apps/*/.env.example
 
 # vercel

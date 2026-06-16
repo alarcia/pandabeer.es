@@ -1,0 +1,74 @@
+# Application stack for the "dev" environment (Raspberry Pi).
+#
+# This is SEPARATE from docker-compose.yml (Postgres + Redis), which already runs
+# permanently on the Pi. Here we only build & run the two app images and attach to
+# the existing infra network so the backend reaches the DBs by container name.
+#
+#   docker compose -f docker-compose.app.yml --env-file .env.deploy up -d --build
+#
+# Host ports: web -> 3002, backend -> 9000 (Cloudflare Tunnel points at these).
+# Not used on the Mac: locally you run `pnpm dev` / `pnpm backend:dev` and the
+# backend reaches the Pi DBs by IP via apps/backend/.env.
+name: pandabeer-apps
+
+services:
+  backend:
+    container_name: pandabeer-backend
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    image: pandabeer-backend:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      # Reach the already-running infra by container name over the shared network.
+      DATABASE_URL: postgres://pandabeer:${POSTGRES_PASSWORD}@pandabeer-postgres:5432/pandabeer_medusa
+      REDIS_URL: redis://pandabeer-redis:6379
+      # Pi Postgres has no SSL.
+      DATABASE_SSL_DISABLED: "true"
+      WORKER_MODE: shared
+      ADMIN_DISABLED: "false"
+      # Public URLs (served via Cloudflare Tunnel).
+      MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL}
+      MEDUSA_STOREFRONT_URL: ${MEDUSA_STOREFRONT_URL}
+      STORE_CORS: ${STORE_CORS}
+      ADMIN_CORS: ${ADMIN_CORS}
+      AUTH_CORS: ${AUTH_CORS}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+    volumes:
+      # Persist admin file uploads outside the container.
+      - pandabeer-backend-uploads:/app/static
+    networks:
+      - apps
+      - infra
+
+  web:
+    container_name: pandabeer-web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        # NEXT_PUBLIC_* are inlined at build time, so they must be passed as build args.
+        NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
+        NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+    image: pandabeer-web:latest
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    depends_on:
+      - backend
+    networks:
+      - apps
+
+networks:
+  apps:
+    driver: bridge
+  infra:
+    # The network created by docker-compose.yml (project name "pandabeer").
+    external: true
+    name: pandabeer_default
+
+volumes:
+  pandabeer-backend-uploads:

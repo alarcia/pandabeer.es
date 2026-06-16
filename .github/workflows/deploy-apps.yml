@@ -1,0 +1,73 @@
+name: Deploy Apps (dev)
+
+# Builds the web + backend images on the self-hosted Raspberry Pi runner and
+# (re)starts them via docker-compose.app.yml. The image is used directly on the
+# machine that builds it — no registry. Infra (Postgres/Redis) is managed
+# separately by deploy-infra.yml and is reached over the shared Docker network.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/**"
+      - "apps/web/Dockerfile"
+      - "apps/backend/Dockerfile"
+      - "docker-compose.app.yml"
+      - ".dockerignore"
+      - ".github/workflows/deploy-apps.yml"
+
+  # Allow manual redeploy.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    env:
+      # Non-secret, dev-environment config (kept in the workflow, not in Secrets).
+      MEDUSA_BACKEND_URL: https://mds.dev.pandabeer.es
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: https://mds.dev.pandabeer.es
+      MEDUSA_STOREFRONT_URL: https://dev.pandabeer.es
+      STORE_CORS: https://dev.pandabeer.es
+      ADMIN_CORS: https://mds.dev.pandabeer.es
+      AUTH_CORS: https://dev.pandabeer.es,https://mds.dev.pandabeer.es
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Write .env.deploy
+        # Secrets come from GitHub; non-secret config from the job env above.
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+          NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${{ secrets.MEDUSA_PUBLISHABLE_KEY }}
+        run: |
+          umask 077
+          cat > .env.deploy <<EOF
+          POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+          JWT_SECRET=${JWT_SECRET}
+          COOKIE_SECRET=${COOKIE_SECRET}
+          NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+          MEDUSA_BACKEND_URL=${MEDUSA_BACKEND_URL}
+          NEXT_PUBLIC_MEDUSA_BACKEND_URL=${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
+          MEDUSA_STOREFRONT_URL=${MEDUSA_STOREFRONT_URL}
+          STORE_CORS=${STORE_CORS}
+          ADMIN_CORS=${ADMIN_CORS}
+          AUTH_CORS=${AUTH_CORS}
+          EOF
+
+      - name: Build and start apps
+        run: |
+          docker compose -f docker-compose.app.yml --env-file .env.deploy up -d --build
+
+      - name: Remove .env.deploy
+        if: always()
+        run: rm -f .env.deploy
+
+      - name: Prune dangling images
+        if: always()
+        run: docker image prune -f

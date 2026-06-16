@@ -1,0 +1,35 @@
+# Build context for both images is the monorepo root, so this single root-level
+# .dockerignore governs `apps/web/Dockerfile` and `apps/backend/Dockerfile`.
+# Keep the context small: dependencies and build artifacts are regenerated inside
+# the image, and secrets must never enter the build.
+
+# dependencies — reinstalled in the image
+**/node_modules
+
+# build artifacts
+**/.next
+**/out
+**/dist
+**/build
+apps/backend/.medusa
+
+# Medusa local file uploads (mutable runtime state)
+apps/backend/static
+
+# secrets / env — never copy real env files into an image layer
+**/.env
+**/.env.*
+!**/.env.example
+!.env.deploy.example
+
+# vcs & tooling
+.git
+.github
+**/*.tsbuildinfo
+.vercel
+.venv
+.agents
+
+# docs / local
+**/*.md
+.DS_Store
