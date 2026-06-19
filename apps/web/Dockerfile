@@ -55,7 +55,9 @@ COPY --from=build /app/apps/web/public ./apps/web/public
 USER node
 
 EXPOSE 3000
+# Use 127.0.0.1 (not "localhost"): BusyBox wget may resolve localhost to ::1 while
+# Next listens on IPv4 0.0.0.0, which made the check fail despite the app serving fine.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -q -O /dev/null http://localhost:3000/ || exit 1
+  CMD wget -q -O /dev/null http://127.0.0.1:3000/ || exit 1
 
 CMD ["node", "apps/web/server.js"]

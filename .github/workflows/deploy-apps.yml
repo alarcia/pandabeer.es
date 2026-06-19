@@ -30,12 +30,14 @@ jobs:
     runs-on: self-hosted
     env:
       # Non-secret, dev-environment config (kept in the workflow, not in Secrets).
-      MEDUSA_BACKEND_URL: https://mds.dev.pandabeer.es
-      NEXT_PUBLIC_MEDUSA_BACKEND_URL: https://mds.dev.pandabeer.es
+      # Single-level subdomains so Cloudflare's *.pandabeer.es Universal cert covers
+      # them (it does NOT cover *.dev.pandabeer.es). dev Medusa = mdsd, prod = mds.
+      MEDUSA_BACKEND_URL: https://mdsd.pandabeer.es
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: https://mdsd.pandabeer.es
       MEDUSA_STOREFRONT_URL: https://dev.pandabeer.es
       STORE_CORS: https://dev.pandabeer.es
-      ADMIN_CORS: https://mds.dev.pandabeer.es
-      AUTH_CORS: https://dev.pandabeer.es,https://mds.dev.pandabeer.es
+      ADMIN_CORS: https://mdsd.pandabeer.es
+      AUTH_CORS: https://dev.pandabeer.es,https://mdsd.pandabeer.es
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
