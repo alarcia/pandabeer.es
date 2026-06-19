@@ -14,7 +14,9 @@ WORKDIR /app
 COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc package.json ./
 COPY apps/web/package.json apps/web/package.json
 COPY apps/backend/package.json apps/backend/package.json
-RUN pnpm install --frozen-lockfile
+# Cache mount keeps downloaded packages between builds — the network is the bottleneck on the Pi.
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
+    pnpm install --frozen-lockfile --store-dir=/pnpm-store
 
 # ── build: compile the Next.js app into a standalone bundle ───────────────────
 FROM node:22-alpine AS build

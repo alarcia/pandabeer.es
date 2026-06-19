@@ -15,7 +15,9 @@ WORKDIR /app
 COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc package.json ./
 COPY apps/web/package.json apps/web/package.json
 COPY apps/backend/package.json apps/backend/package.json
-RUN pnpm install --frozen-lockfile
+# Cache mount keeps downloaded packages between builds — the network is the bottleneck on the Pi.
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
+    pnpm install --frozen-lockfile --store-dir=/pnpm-store
 
 # ── build: produce .medusa/server and install its production deps ──────────────
 FROM node:22-alpine AS build
@@ -31,8 +33,12 @@ RUN pnpm --dir apps/backend build
 
 # The emitted server is a standalone npm project. Install its prod dependencies
 # in place so the runtime stage can just copy the finished directory.
+# This is npm (Medusa's build output is an npm project) and the dir is regenerated
+# every build, so its layer never caches — the npm cache mount is what saves the
+# re-download. Keep it on every build.
 WORKDIR /app/apps/backend/.medusa/server
-RUN npm install --omit=dev
+RUN --mount=type=cache,id=npm-cache,target=/root/.npm \
+    npm install --omit=dev --cache /root/.npm
 
 # ── runtime: ship only the built server ───────────────────────────────────────
 FROM node:22-alpine AS runtime
