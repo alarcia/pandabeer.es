@@ -1,2 +1,15 @@
 packages:
   - "apps/*"
+
+# Packages allowed to run install scripts. pnpm 10 also reads this from package.json
+# (pnpm.onlyBuiltDependencies), but pnpm 11 reads it from HERE — keep both in sync so
+# the build works regardless of the pnpm version corepack resolves. Without this, CI
+# installs fail with ERR_PNPM_IGNORED_BUILDS. sharp powers Next image optimization;
+# the rest are native deps used by Medusa.
+onlyBuiltDependencies:
+  - "@medusajs/telemetry"
+  - esbuild
+  - msgpackr-extract
+  - protobufjs
+  - sharp
+  - unrs-resolver

@@ -2,6 +2,7 @@
   "name": "pandabeer.es",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.29.1",
   "scripts": {
     "dev": "pnpm --dir apps/web dev",
     "web": "pnpm --dir apps/web dev",
