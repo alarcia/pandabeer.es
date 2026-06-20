@@ -17,6 +17,10 @@ services:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
+      args:
+        # Baked into the admin bundle at build time (admin.backendUrl). Must match the
+        # public URL the browser uses, or admin login can't reach the API.
+        MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL}
     image: pandabeer-backend:latest
     restart: unless-stopped
     ports:
