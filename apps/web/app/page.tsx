@@ -214,6 +214,14 @@ export default async function Home() {
 
         <div className="mx-auto flex max-w-[1280px] flex-col gap-4 border-t border-background/10 px-4 pt-8 text-[12px] font-medium uppercase tracking-[0.08em] text-background/65 md:flex-row md:items-center md:justify-between sm:px-6 lg:px-6">
           <p>{homeContent.footer.copyright}</p>
+          <a
+            className="text-background/40 transition-colors hover:text-background/65"
+            href={`${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/app`}
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            Admin
+          </a>
         </div>
       </footer>
     </div>
