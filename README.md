@@ -35,6 +35,15 @@ no cart or checkout yet.
   `@medusajs/js-sdk` on the server (good for SEO).
 - **Infra** — PostgreSQL + Redis (Docker). Production target: Vercel + Neon + Upstash.
 
+## Content curation (Medusa metadata)
+
+| Key | Value | Effect |
+|---|---|---|
+| `metadata.hero_featured` | `true` | Picks this product as the hero featured beer (one) |
+| `metadata.pouring` | `true` | Shows the product in the "Currently Pouring" grid (up to 6) |
+| `metadata.pouring_order` | number | Optional explicit order within the grid (ascending) |
+| `metadata.tag` | string | Marketing badge shown on the card (e.g. "Limited edition") |
+
 ## Project layout
 
 pnpm-workspace monorepo with two independently deployable units:
