@@ -33,10 +33,6 @@ services:
       DATABASE_SSL_DISABLED: "true"
       WORKER_MODE: shared
       ADMIN_DISABLED: "false"
-      # Where the local file provider writes uploads inside the container. Absolute
-      # path, bind-mounted to a host folder (see volumes) so it survives rebuilds.
-      # Must match the container side of the HOST_UPLOADS_PATH mount below.
-      FILE_UPLOAD_DIR: /app/static
       # Public URLs (served via Cloudflare Tunnel).
       MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL}
       MEDUSA_STOREFRONT_URL: ${MEDUSA_STOREFRONT_URL}
@@ -48,9 +44,11 @@ services:
     volumes:
       # Persist uploaded files on a plain host folder (bind mount), outside the
       # container and outside Docker-managed volumes, so `up --build` never wipes
-      # them and they can be backed up as regular files. HOST_UPLOADS_PATH is
-      # created by the deploy workflow and must match FILE_UPLOAD_DIR above.
-      - ${HOST_UPLOADS_PATH}:/app/static
+      # them and they can be backed up as regular files. HOST_UPLOADS_PATH is created
+      # by the deploy workflow. The container path is the exact dir Medusa serves
+      # /static from (the built server's ./static), so uploads land where the static
+      # route looks — do NOT change it to an arbitrary path.
+      - ${HOST_UPLOADS_PATH}:/app/apps/backend/.medusa/server/static
     networks:
       - apps
       - infra
