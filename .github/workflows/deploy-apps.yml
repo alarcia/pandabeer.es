@@ -38,6 +38,9 @@ jobs:
       STORE_CORS: https://dev.pandabeer.es
       ADMIN_CORS: https://mdsd.pandabeer.es
       AUTH_CORS: https://dev.pandabeer.es,https://mdsd.pandabeer.es
+      # Host folder on the Pi where uploaded files live, bind-mounted into the
+      # backend container. Kept outside the image so redeploys don't wipe uploads.
+      HOST_UPLOADS_PATH: /home/deployer/pandabeer-uploads
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -62,7 +65,11 @@ jobs:
           STORE_CORS=${STORE_CORS}
           ADMIN_CORS=${ADMIN_CORS}
           AUTH_CORS=${AUTH_CORS}
+          HOST_UPLOADS_PATH=${HOST_UPLOADS_PATH}
           EOF
+
+      - name: Ensure the uploads directory exists on the host
+        run: mkdir -p "${HOST_UPLOADS_PATH}"
 
       - name: Build and start apps
         run: |

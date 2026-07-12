@@ -25,4 +25,35 @@ module.exports = defineConfig({
     backendUrl: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
     storefrontUrl: process.env.MEDUSA_STOREFRONT_URL || "http://localhost:3000",
   },
+  modules: [
+    {
+      // File storage for uploaded product images. We configure the default local
+      // (on-disk) provider explicitly:
+      //  - backend_url is the base URL Medusa stores for each file. It must be an
+      //    ABSOLUTE URL at the backend's PUBLIC host: the storefront renders these
+      //    images from a different origin than the backend, so a relative
+      //    "/static/..." would resolve against the storefront and 404. Driven by
+      //    MEDUSA_BACKEND_URL so each environment supplies its own host — no hardcode.
+      //  - upload_dir is where files are written on disk. In the Pi container this is
+      //    an absolute path bind-mounted to a host folder (see docker-compose.app.yml),
+      //    so uploads survive image rebuilds; locally it defaults to "static"
+      //    (apps/backend/static), the previous behaviour.
+      // When the backend eventually runs on an ephemeral host (no persistent disk),
+      // swap this provider for the S3-compatible one (@medusajs/file-s3, e.g.
+      // Cloudflare R2) — same File Module, just a different provider block.
+      resolve: "@medusajs/medusa/file",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/file-local",
+            id: "local",
+            options: {
+              backend_url: `${process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"}/static`,
+              upload_dir: process.env.FILE_UPLOAD_DIR || "static",
+            },
+          },
+        ],
+      },
+    },
+  ],
 });
