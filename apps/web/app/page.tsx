@@ -1,6 +1,12 @@
 import homeContent from "@/content/home.json";
 import { getHeroFeatured, getCurrentlyPouring, type Beer } from "@/lib/content";
 
+// ISR: regenerate this page at most once per minute, so admin edits (new beers,
+// hero / "pouring" changes) appear within ~60s without a rebuild — and without
+// re-rendering on every single request. See lib/content.ts for the per-request
+// dedupe of the underlying product fetch.
+export const revalidate = 60;
+
 const heroGradient = "bg-[radial-gradient(circle_at_top_right,_rgba(243,182,53,0.22),_transparent_42%),linear-gradient(135deg,_#2f2a24_0%,_#403830_45%,_#2f2a24_100%)]";
 const cardGradient = "bg-[linear-gradient(145deg,_rgba(243,182,53,0.2),_rgba(236,233,219,0.95))]";
 

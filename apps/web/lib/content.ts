@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { sdk } from "@/lib/medusa"
 
 /** Maximum number of beers in the "Currently Pouring" grid.
@@ -87,8 +88,11 @@ type StoreProductLike = {
  * Fetches a batch of products from the Store API with the region context needed
  * for prices. Returns null on any failure or if the key is missing, so that
  * callers degrade to the placeholder (the site never renders blank).
+ *
+ * Memoized per request with React `cache()`: the hero and the grid both call
+ * this within the same render, so the product list is fetched only once.
  */
-async function listProducts(): Promise<StoreProductLike[] | null> {
+const listProducts = cache(async function listProducts(): Promise<StoreProductLike[] | null> {
   // With no key configured there's no point in calling.
   if (!process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY) {
     return null
@@ -109,7 +113,7 @@ async function listProducts(): Promise<StoreProductLike[] | null> {
     // Backend down, CORS, invalid key... degrade to placeholder.
     return null
   }
-}
+})
 
 /** First available region, used as the price context. null if there's none. */
 async function getDefaultRegionId(): Promise<string | null> {
