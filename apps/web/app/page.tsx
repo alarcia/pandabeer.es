@@ -48,11 +48,11 @@ export default async function Home() {
           </div>
         </nav>
 
-        <section className="min-h-[60vh] bg-accent text-background">
-          <div className="mx-auto grid min-h-[60vh] max-w-[1280px] items-stretch lg:grid-cols-[minmax(0,7fr)_minmax(320px,3fr)]">
-            <div className={`relative flex items-center overflow-hidden px-4 py-16 sm:px-6 md:py-24 ${heroGradient}`}>
+        <section className="bg-accent text-background">
+          <div className="mx-auto grid max-w-[1280px] items-stretch lg:grid-cols-[minmax(0,7fr)_minmax(320px,3fr)]">
+            <div className={`relative flex items-center overflow-hidden px-4 py-5 sm:px-6 md:py-6 ${heroGradient}`}>
               <div className="relative z-10 max-w-2xl">
-                <p className="mb-4 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
+                <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
                 <h1 className="font-serif text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] text-inherit">
                   {homeContent.hero.title.split("\n").map((line) => (
                     <span key={line} className="block">
@@ -60,8 +60,8 @@ export default async function Home() {
                     </span>
                   ))}
                 </h1>
-                <p className="mt-6 max-w-xl text-[18px] leading-8 text-background/80">{homeContent.hero.body}</p>
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                <p className="mt-3 max-w-xl text-[16px] leading-7 text-background/80">{homeContent.hero.body}</p>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                   <a className="inline-flex items-center justify-center rounded-full border border-background/30 px-8 py-4 text-[12px] font-bold uppercase tracking-[0.08em] text-background transition-colors hover:bg-background/10" href="#beers">
                     {homeContent.hero.secondaryCta}
                   </a>
@@ -72,11 +72,11 @@ export default async function Home() {
               </div>
             </div>
 
-            <aside className="flex items-center justify-center bg-surface px-6 py-12 text-accent">
+            <aside className="flex items-center justify-center bg-surface px-6 py-4 text-accent">
               <div className="w-full max-w-sm text-center">
                 <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.24em] text-primary display-accent">{homeContent.hero.eyebrow}</p>
                 <h2 className="font-serif text-[clamp(2rem,3vw,3rem)] font-bold leading-tight">{hero?.title ?? homeContent.hero.featuredTitle}</h2>
-                <div className={`mt-8 flex ${hero?.imageUrl ? "aspect-[3/4]" : "h-64"} items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
+                <div className={`mt-4 flex ${hero?.imageUrl ? "aspect-square" : "h-36"} items-center justify-center overflow-hidden rounded-[12px] border border-text/10 ${cardGradient} shadow-[0_6px_18px_rgba(47,42,36,0.08)]`}>
                   {hero?.imageUrl ? (
                     // Whole vertical bottle over the brand gradient (uncropped).
                     // eslint-disable-next-line @next/next/no-img-element
