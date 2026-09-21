@@ -12,10 +12,16 @@
   "dependencies": {
     "@medusajs/admin-sdk": "^2.15.5",
     "@medusajs/framework": "^2.14.0",
-    "@medusajs/medusa": "^2.14.0"
+    "@medusajs/icons": "^2.15.5",
+    "@medusajs/medusa": "^2.14.0",
+    "@medusajs/ui": "^4.1.15",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "ts-node": "^10",
     "typescript": "^5"
   }
